@@ -105,30 +105,43 @@ var getGitHubProfileAsync = require('./promisification').getGitHubProfileAsync
 
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
+  // var profile = undefined;
   return new Promise(function(resolve, reject) {
     // console.log(readFilePath);
     // console.log(writeFilePath);
     pluckFirstLineFromFileAsync(readFilePath)
+    // .then(function(user) {
+    //   if (!user) {
+    //     throw new Error('Error');
+    //   } else {
+    //     return user;
+    //   }
+    // })
     .then(function(user) {
-      if (!user) {
-        throw new Error('Error');
-      } else {
-        return user;
-      }
-    })
-    .then(function(user) {
-      var profile = getGitHubProfileAsync(user);
-      return profile;
+      // var profile = 
+      getGitHubProfileAsync(user);
+      // return profile;
     })
     .then(function(profile) {
-      fs.writeFile(writeFilePath, function(err, response) {
-        if(response) {
-          resolve(response);
+      console.log(profile);
+      fs.writeFile(writeFilePath, profile, function(err, response) {
+          // console.log('profile', profile)
+          // console.log('err', err)
+        if(profile) {
+          resolve(profile);
         } else {
           reject(err);
         }
       });
     });
+    // .then(fs.writeFile(writeFilePath, profile));
+  })
+};
+    // .catch(function(err) {
+    //   // Will catch any promise rejections or thrown errors in the chain!
+    //   console.log('Oops, caught an error: ', err)
+    // });
+
     // console.log(username);
       //read file
       //find username
@@ -136,8 +149,6 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
     //then, write stored username to file
     
 
-  })
-};
 
 module.exports = {
   fetchProfileAndWriteToFile: fetchProfileAndWriteToFile
